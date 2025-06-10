@@ -1,0 +1,197 @@
+/* Top Bar */
+// a.k.a. the panel
+
+$button_radius: 20px;
+
+$privacy_indicator_color: if($variant == 'light', $orange_4, $orange_3);
+$recording_indicator_color: $red_4;
+
+$transparent_panel_fg_color: $light_1;    // always white for transparent lock screens
+$system_panel_fg_color: $system_fg_color; // always light for lockscreen, overview
+
+$panel_height: 3em; // Increased panel height
+$panel_transition_duration: 250ms; // same as the overview transition duration
+
+#panel {
+  background-color: transparent; // Ensure panel is transparent
+  font-weight: bold;
+  height: $panel_height;
+  @extend %numeric;
+  transition-duration: $panel_transition_duration;
+  // Removed borders from #panel itself
+
+  // panel menus
+  .panel-button {
+    @include panel_button();
+    background-color: $bg_color; // Changed to $bg_color
+    border-top: 1px solid $top_light_color;
+    border-bottom: 1px solid $bottom_shadow_color;
+    border-radius: $button_radius;
+    margin: 0.5em; // Added margin
+
+    padding-top: 3px; // Increased vertical padding
+    padding-bottom: 3px; // Increased vertical padding
+    height: 2em;
+    background-clip: padding-box; 
+
+    -natural-hpadding: $base_padding * 2;
+    -minimum-hpadding: $base_padding;
+
+    // status area icons
+    .system-status-icon {
+      icon-size: $scalable_icon_size;
+      padding: 0 $base_padding;
+      margin: 0 $base_margin;
+    }
+
+    // app menu icon
+    .app-menu-icon {
+      -st-icon-style: symbolic;
+      // dimensions of the icon are hardcoded
+    }
+
+    // reduce margin between icons in combined menu
+    .panel-status-menu-box,
+    .panel-status-indicators-box {
+      spacing: $base_margin;
+
+      > .system-status-icon {
+        padding: 0;
+      }
+    }
+
+    &#panelActivities {
+      & StBoxLayout {
+        padding: 0 $scaled_padding * 0.5; // use em padding to keep proportion
+        spacing: 5px;
+      }
+
+      & .workspace-dot {
+        border-radius: $forced_circular_radius;
+        min-width: $scalable_icon_size * 0.5;
+        min-height: $scalable_icon_size * 0.5;
+        background-color: $panel_fg_color;
+      }
+    }
+
+    // screen activity indicators
+    &.screen-recording-indicator,
+    &.screen-sharing-indicator {
+      StBoxLayout {
+        spacing: $scaled_padding;
+      }
+
+      StIcon {
+        icon-size: $scalable_icon_size;
+      }
+    }
+
+    &.screen-recording-indicator {
+      @include panel_button($bg:$recording_indicator_color, $fg:$_base_color_light, $style: filled);
+    }
+
+    &.screen-sharing-indicator {
+      @include panel_button($bg:$privacy_indicator_color, $fg:$_base_color_light, $style: filled);
+    }
+
+    // clock
+    &.clock-display {
+      // Force opaque background for the clock display button in its default state.
+      // It inherits general .panel-button styling (including the panel_button mixin for states).
+      // The !important is to ensure this overrides any transparency set by the inherited mixin.
+      background-color: $bg_color !important;
+
+      .clock {
+        // Ensure the inner text container for the clock is transparent,
+        // so the button's background (now forced opaque) shows through.
+        // Text color itself should be handled by the inherited panel_button mixin's state styling.
+        background: transparent; // Use shorthand to clear all background properties
+      }
+
+      .messages-indicator {
+        icon-size: $scalable_icon_size;
+      }
+    }
+  }
+
+  // transparent panel on overview, lock & login screens
+  &:overview,
+  &.unlock-screen,
+  &.login-screen {
+    background-color: transparent;
+
+    // unfortunate duplication to keep indicator style in these states
+    .panel-button {
+      &.screen-recording-indicator {
+        @include panel_button($bg:$recording_indicator_color, $fg:$_base_color_light, $style: filled);
+      }
+
+      &.screen-sharing-indicator {
+        @include panel_button($bg:$privacy_indicator_color, $fg:$_base_color_light, $style: filled);
+      }
+    }
+  }
+
+  // use transparent text styles for lock & login screen panels
+  &.unlock-screen,
+  &.login-screen {
+    .panel-button {
+      @include panel_button($fg:$transparent_panel_fg_color);
+
+      // clock
+      &.clock-display {
+        @include panel_button($fg:$transparent_panel_fg_color, $highlighted_child: true, $child_class: '.clock');
+      }
+    }
+  }
+
+  // use system text styles for overview panel
+  &:overview {
+    .panel-button {
+      @include panel_button($fg:$system_panel_fg_color);
+
+      &#panelActivities .workspace-dot {
+        background-color: $system_panel_fg_color;
+      }
+
+      // clock
+      &.clock-display {
+        @include panel_button($fg:$system_panel_fg_color, $highlighted_child: true, $child_class: '.clock');
+      }
+    }
+  }
+
+  .panel-status-indicators-box,
+  .panel-status-menu-box {
+    spacing: 2px;
+  }
+
+  // spacing between power icon and (optional) percentage label
+  .power-status.panel-status-indicators-box {
+    spacing: 0;
+  }
+
+  // important privacy related indicators
+  .privacy-indicator { color: $privacy_indicator_color; }
+}
+
+// App Menu
+#appMenu {
+  spacing: $scaled_padding;
+  .label-shadow { color: transparent; }
+}
+
+#appMenu .panel-status-menu-box {
+  padding: 0 $scaled_padding;
+  spacing: $scaled_padding;
+}
+
+
+// Clock
+.clock-display-box {
+  spacing: 2px;
+  .clock {
+    padding-left: $scaled_padding * 2;
+    padding-right: $scaled_padding * 2;
+  }
+}
