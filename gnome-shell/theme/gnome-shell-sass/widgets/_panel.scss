@@ -9,7 +9,7 @@ $recording_indicator_color: $red_4;
 $transparent_panel_fg_color: $light_1;    // always white for transparent lock screens
 $system_panel_fg_color: $system_fg_color; // always light for lockscreen, overview
 
-$panel_height: 3em; // Increased panel height
+$panel_height: 3.5em; // Increased panel height
 $panel_transition_duration: 250ms; // same as the overview transition duration
 
 #panel {
@@ -22,20 +22,66 @@ $panel_transition_duration: 250ms; // same as the overview transition duration
 
   // panel menus
   .panel-button {
-    @include panel_button();
-    background-color: $bg_color; // Changed to $bg_color
-    border-top: 1px solid $top_light_color;
-    border-bottom: 1px solid $bottom_shadow_color;
+    @include panel_button(); // Mixin provides transitions, font-weight, its own border/radius, and its own box-shadow logic for fill.
+    background-color: $bg_color; // Our primary background color.
+
+    // Applying combined approach: border-top for top line, box-shadow for bottom line.
+    color: $panel_fg_color; // Ensure text color is set
+
+    border-top: 1px solid $top_light_color;    // Top line (color $dark_1)
+    border-bottom-width: 0px;                  // No actual bottom border
+    border-left-width: 0px;                    // No left border
+    border-right-width: 0px;                   // No right border
+    border-style: solid none none none;        // Ensures only top border is solid via 'border' property
+
+    // Use box-shadow for the bottom line (color $dark_5)
+    // Using standard CSS inset y-offset: -1px is bottom edge.
+    box-shadow: inset 0 -1px 0 $bottom_shadow_color;
+
     border-radius: $button_radius;
-    margin: 0.5em; // Added margin
-
-    padding-top: 3px; // Increased vertical padding
-    padding-bottom: 3px; // Increased vertical padding
+    margin: 0.5em;
+    padding-top: 3px; // Padding between content and the new box-shadow "borders".
+    padding-bottom: 3px;
     height: 2em;
-    background-clip: padding-box; 
-
+    background-clip: padding-box; // Standard, background extends to padding edge.
     -natural-hpadding: $base_padding * 2;
     -minimum-hpadding: $base_padding;
+
+    // Overrides for hover/focus/active states
+    &:focus,
+    &:hover {
+      background-color: darken($bg_color, 5%) !important;
+      outline: 0 !important;
+
+      // Re-assert border-top and box-shadow for bottom line
+      border-top: 1px solid $top_light_color !important;
+      border-bottom-width: 0px !important;
+      border-left-width: 0px !important;
+      border-right-width: 0px !important;
+      border-style: solid none none none !important;
+      box-shadow: inset 0 -1px 0 $bottom_shadow_color !important; // Bottom shadow with corrected y-offset
+      border-radius: $button_radius !important; // Crucial for radius glitch with border-top
+    }
+
+    &:active,
+    &:checked {
+      background-color: darken($bg_color, 10%) !important;
+      outline: 0 !important;
+
+      // Re-assert border-top and box-shadow for bottom line
+      border-top: 1px solid $top_light_color !important;
+      border-bottom-width: 0px !important;
+      border-left-width: 0px !important;
+      border-right-width: 0px !important;
+      border-style: solid none none none !important;
+      box-shadow: inset 0 -1px 0 $bottom_shadow_color !important; // Bottom shadow with corrected y-offset
+      border-radius: $button_radius !important;
+
+      &:hover { // Hover on active/checked
+        background-color: darken($bg_color, 12%) !important;
+        // Borders, box-shadow, and radius are inherited.
+      }
+    }
 
     // status area icons
     .system-status-icon {
@@ -70,7 +116,7 @@ $panel_transition_duration: 250ms; // same as the overview transition duration
         border-radius: $forced_circular_radius;
         min-width: $scalable_icon_size * 0.5;
         min-height: $scalable_icon_size * 0.5;
-        background-color: $panel_fg_color;
+        background-color: $panel_fg_color; // Will be overridden by state styles if needed
       }
     }
 
@@ -84,32 +130,78 @@ $panel_transition_duration: 250ms; // same as the overview transition duration
       StIcon {
         icon-size: $scalable_icon_size;
       }
+      // These use panel_button with $style: filled.
+      // Their specific state overrides below will handle their appearance.
     }
 
     &.screen-recording-indicator {
       @include panel_button($bg:$recording_indicator_color, $fg:$_base_color_light, $style: filled);
+      // Ensure state overrides don't break this
+      &:focus, &:hover, &:active, &:checked, &:active:hover {
+         @include panel_button($bg:$recording_indicator_color, $fg:$_base_color_light, $style: filled);
+      }
     }
 
     &.screen-sharing-indicator {
       @include panel_button($bg:$privacy_indicator_color, $fg:$_base_color_light, $style: filled);
+      // Ensure state overrides don't break this
+      &:focus, &:hover, &:active, &:checked, &:active:hover {
+         @include panel_button($bg:$privacy_indicator_color, $fg:$_base_color_light, $style: filled);
+      }
     }
 
     // clock
     &.clock-display {
-      // Force opaque background for the clock display button in its default state.
-      // It inherits general .panel-button styling (including the panel_button mixin for states).
-      // The !important is to ensure this overrides any transparency set by the inherited mixin.
-      background-color: $bg_color !important;
+      background-color: $bg_color !important; // Ensure opaque background
+
+      // Explicitly apply combined style for default state of the clock, with !important
+      border-top: 1px solid $top_light_color !important;
+      border-bottom-width: 0px !important;
+      border-left-width: 0px !important;
+      border-right-width: 0px !important;
+      border-style: solid none none none !important;
+      box-shadow: inset 0 -1px 0 $bottom_shadow_color !important;
+      border-radius: $button_radius !important; // Ensure radius is also applied strongly
 
       .clock {
-        // Ensure the inner text container for the clock is transparent,
-        // so the button's background (now forced opaque) shows through.
-        // Text color itself should be handled by the inherited panel_button mixin's state styling.
-        background: transparent; // Use shorthand to clear all background properties
+        background: transparent;
       }
 
       .messages-indicator {
         icon-size: $scalable_icon_size;
+      }
+
+      // Ensure clock also maintains dark theme on hover/active
+      // and uses the combined border/shadow style.
+      &:focus,
+      &:hover {
+        background-color: darken($bg_color, 5%) !important;
+        outline: 0 !important;
+        // Apply combined style, consistent with .panel-button:hover
+        border-top: 1px solid $top_light_color !important;
+        border-bottom-width: 0px !important;
+        border-left-width: 0px !important;
+        border-right-width: 0px !important;
+        border-style: solid none none none !important;
+        box-shadow: inset 0 -1px 0 $bottom_shadow_color !important; // Bottom shadow
+        border-radius: $button_radius !important; // Ensure radius is maintained
+      }
+      &:active,
+      &:checked {
+        background-color: darken($bg_color, 10%) !important;
+        outline: 0 !important;
+        // Apply combined style, consistent with .panel-button:active
+        border-top: 1px solid $top_light_color !important;
+        border-bottom-width: 0px !important;
+        border-left-width: 0px !important;
+        border-right-width: 0px !important;
+        border-style: solid none none none !important;
+        box-shadow: inset 0 -1px 0 $bottom_shadow_color !important; // Bottom shadow
+        border-radius: $button_radius !important; // Ensure radius is maintained
+        &:hover {
+          background-color: darken($bg_color, 12%) !important;
+          // Borders, box-shadow, radius inherited from parent active/checked state.
+        }
       }
     }
   }
@@ -120,14 +212,48 @@ $panel_transition_duration: 250ms; // same as the overview transition duration
   &.login-screen {
     background-color: transparent;
 
-    // unfortunate duplication to keep indicator style in these states
     .panel-button {
+      // These buttons will inherit border-width: 0 and the border-simulating box-shadow
+      // from the main .panel-button rule for their default appearance.
+      // The @include panel_button($fg:...) inside these contexts will set text color
+      // and attempt to set its own fill via box-shadow, which our main rule's box-shadow overrides.
+
+      // General state overrides for transparent panel contexts
+      &:focus,
+      &:hover {
+        background-color: darken($bg_color, 5%) !important; // Match normal panel button hover (becomes opaque dark)
+        outline: 0 !important; // Ensure no outline
+        // Re-apply border-simulating box-shadows to maintain the top/bottom lines
+        box-shadow: inset 0 1px 0 $top_light_color,
+                    inset 0 -1px 0 $bottom_shadow_color;
+      }
+      &:active,
+      &:checked {
+        background-color: darken($bg_color, 10%) !important; // Match normal panel button active
+        outline: 0 !important;
+        // Re-apply border-simulating box-shadows
+        // REVERTING TO ORIGINAL ORDER for consistency:
+        box-shadow: inset 0 1px 0 $top_light_color,     // Top line (lighter dark) first
+                    inset 0 -1px 0 $bottom_shadow_color; // Bottom line (darker) second
+        &:hover {
+          background-color: darken($bg_color, 12%) !important; // Match normal panel button active:hover
+          // Box-shadow inherited from parent active/checked state.
+        }
+      }
+
+      // screen activity indicators need to keep their filled style
       &.screen-recording-indicator {
         @include panel_button($bg:$recording_indicator_color, $fg:$_base_color_light, $style: filled);
+         &:focus, &:hover, &:active, &:checked, &:active:hover {
+           @include panel_button($bg:$recording_indicator_color, $fg:$_base_color_light, $style: filled);
+        }
       }
 
       &.screen-sharing-indicator {
         @include panel_button($bg:$privacy_indicator_color, $fg:$_base_color_light, $style: filled);
+        &:focus, &:hover, &:active, &:checked, &:active:hover {
+           @include panel_button($bg:$privacy_indicator_color, $fg:$_base_color_light, $style: filled);
+        }
       }
     }
   }
@@ -136,11 +262,18 @@ $panel_transition_duration: 250ms; // same as the overview transition duration
   &.unlock-screen,
   &.login-screen {
     .panel-button {
-      @include panel_button($fg:$transparent_panel_fg_color);
+      @include panel_button($fg:$transparent_panel_fg_color); // This sets text color and default state fill
 
       // clock
       &.clock-display {
         @include panel_button($fg:$transparent_panel_fg_color, $highlighted_child: true, $child_class: '.clock');
+        background-color: transparent !important; // Button itself is transparent
+        box-shadow: none !important; // No fill for the button itself
+
+        &:focus, &:hover, &:active, &:checked, &:active:hover {
+            background-color: transparent !important; // Keep button itself transparent
+            box-shadow: none !important; // Child .clock gets styled by the mixin
+        }
       }
     }
   }
@@ -148,7 +281,7 @@ $panel_transition_duration: 250ms; // same as the overview transition duration
   // use system text styles for overview panel
   &:overview {
     .panel-button {
-      @include panel_button($fg:$system_panel_fg_color);
+      @include panel_button($fg:$system_panel_fg_color); // This sets text color and default state fill
 
       &#panelActivities .workspace-dot {
         background-color: $system_panel_fg_color;
@@ -157,6 +290,13 @@ $panel_transition_duration: 250ms; // same as the overview transition duration
       // clock
       &.clock-display {
         @include panel_button($fg:$system_panel_fg_color, $highlighted_child: true, $child_class: '.clock');
+        background-color: transparent !important; // Button itself is transparent
+        box-shadow: none !important; // No fill for the button itself
+
+         &:focus, &:hover, &:active, &:checked, &:active:hover {
+            background-color: transparent !important; // Keep button itself transparent
+            box-shadow: none !important; // Child .clock gets styled by the mixin
+        }
       }
     }
   }
@@ -185,7 +325,6 @@ $panel_transition_duration: 250ms; // same as the overview transition duration
   padding: 0 $scaled_padding;
   spacing: $scaled_padding;
 }
-
 
 // Clock
 .clock-display-box {

@@ -38,11 +38,11 @@ $switch_handle_size: 20px;
   }
 
   &:checked {
-    background: -st-accent-color;
+    background: $theme_color;
     color: -st-accent-fg-color;
 
     &:hover {
-      background-color: st-lighten(-st-accent-color, 5%);
+      background-color: st-lighten($theme_color, 5%);
       color: st-lighten(-st-accent-fg-color, 5%);
     }
 

@@ -3,9 +3,10 @@
 // base colors
 $_base_color_dark: #141416;
 $_base_color_light: #fafafb;
+$theme_color: #2b2752;
 
 // accent colors
-$accent_color: if($variant== 'light', -st-accent-color, st-mix(-st-accent-color, $light_1, 60%));
+$accent_color: if($variant== 'light', $theme_color, st-mix($theme_color, $light_1, 60%));
 
 // colors for destructive elements
 $destructive_bg_color: if($variant == 'light', $red_3, $red_4);
@@ -26,7 +27,7 @@ $error_fg_color: $light_1;
 $error_color: $error_bg_color;
 
 // link colors
-$link_color: if($variant == 'light', st-darken(-st-accent-color, 10%), st-lighten(-st-accent-color, 20%));
+$link_color: if($variant == 'light', st-darken($theme_color, 10%), st-lighten($theme_color, 20%));
 $link_visited_color: st-transparentize($link_color, .6);
 
 // special cased widget definitions

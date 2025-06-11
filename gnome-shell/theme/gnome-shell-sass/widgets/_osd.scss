@@ -36,7 +36,7 @@ $osd_levelbar_height:6px;
 
 // Monitor number label
 .osd-monitor-label, .osd-break-countdown-label {
-  background-color: -st-accent-color;
+  background-color: $theme_color;
   color: -st-accent-fg-color;
   border-radius: $modal_radius;
   font-size: 3em;

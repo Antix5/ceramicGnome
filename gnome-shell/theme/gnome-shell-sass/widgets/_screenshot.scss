@@ -168,18 +168,18 @@ $screenshot_ui_button_red: $red_4;
 .screenshot-ui-window-selector-window {
   &:hover {
     .screenshot-ui-window-selector-window-border {
-      border-color: st-darken(-st-accent-color, 15%);
+      border-color: st-darken($theme_color, 15%);
     }
   }
   &:checked {
     .screenshot-ui-window-selector-window-border {
-      border-color: -st-accent-color;
-      background-color: st-transparentize(-st-accent-color, 0.8);
+      border-color: $theme_color;
+      background-color: st-transparentize($theme_color, 0.8);
     }
 
     .screenshot-ui-window-selector-check {
       color: -st-accent-fg-color;
-      background-color: -st-accent-color;
+      background-color: $theme_color;
     }
   }
 }

@@ -6,15 +6,16 @@
 @import '_palette.scss';
 @import '_default-colors.scss';
 
-
-// global colors
+// global csolors
 $base_color: if($variant == 'light', $light_1, $_base_color_dark);
-$bg_color: if($variant == 'light', $_base_color_light, #151518);
+$bg_color: if($variant == 'light', $_base_color_light, #0c070f);
 $fg_color: if($variant == 'light', $_base_color_dark, $light_1);
 
 // OSD elements
 $osd_fg_color: $light_1;
 $osd_bg_color: lighten($_base_color_dark, 5%);
+
+
 
 // system elements (e.g. the overview) that are always dark
 $system_base_color: $_base_color_dark;
@@ -30,11 +31,11 @@ $card_shadow_color: if($variant == 'light', transparentize($dark_5, .97), transp
 $card_shadow_border_color: if($variant == 'light', transparentize($dark_5, .91), transparent);
 
 // Custom border colors for top lighting effect
-$top_light_color: $dark_3;
-$bottom_shadow_color: $dark_5;
+$top_light_color: #6b576a;
+$bottom_shadow_color: #1b1938;
 
 //
-// Derived Colors
+// Derived Colors 
 //
 // colors based on the global defines above
 
@@ -70,4 +71,4 @@ $active_bg_color: if($variant=='light', darken($bg_color, 11%), lighten($bg_colo
 $active_fg_color: if($variant=='light', darken($fg_color, 11%), lighten($fg_color, 12%));
 
 // accent colors
-$accent_borders_color: if($variant== 'light', st-darken(-st-accent-color, 20%), st-lighten(-st-accent-color, 30%));
+$accent_borders_color: if($variant== 'light', st-darken($theme_color, 20%), st-lighten($theme_color, 30%));

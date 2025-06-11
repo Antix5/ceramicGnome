@@ -3,14 +3,48 @@ $button_radius: 20px;
 .quick-settings {
   padding: $base_padding * 3;
   border-radius: $modal_radius * 2.25;
+
+  // Apply combined style to the main Quick Settings container
   border-top: 1px solid $top_light_color;
-  border-bottom: 1px solid $bottom_shadow_color;
+  border-left-width: 0px;
+  border-right-width: 0px;
+  border-bottom-width: 0px;
+  border-style: solid none none none;
+  box-shadow: inset 0 -1px 0 $bottom_shadow_color;
 
   .icon-button, .button {
-    padding: $base_padding * 1.75;
+    padding: $base_padding * 1.75; // Keep padding
+
+    // Combined style for default state
     border-top: 1px solid $top_light_color;
-    border-bottom: 1px solid $bottom_shadow_color;
+    border-left-width: 0px;
+    border-right-width: 0px;
+    border-bottom-width: 0px;
+    border-style: solid none none none;
+    box-shadow: inset 0 -1px 0 $bottom_shadow_color;
     border-radius: $button_radius;
+
+    &:hover,
+    &:focus {
+      // Preserve existing background color changes, apply combined border/shadow
+      border-top: 1px solid $top_light_color !important;
+      border-left-width: 0px !important;
+      border-right-width: 0px !important;
+      border-bottom-width: 0px !important;
+      border-style: solid none none none !important;
+      box-shadow: inset 0 -1px 0 $bottom_shadow_color !important;
+      border-radius: $button_radius; // Removed !important
+    }
+    &:active {
+      // Preserve existing background color changes, apply combined border/shadow
+      border-top: 1px solid $top_light_color !important;
+      border-left-width: 0px !important;
+      border-right-width: 0px !important;
+      border-bottom-width: 0px !important;
+      border-style: solid none none none !important;
+      box-shadow: inset 0 -1px 0 $bottom_shadow_color !important;
+      border-radius: $button_radius; // Removed !important
+    }
   }
 }
 
@@ -20,8 +54,13 @@ $button_radius: 20px;
 }
 
 .quick-toggle, .quick-toggle-has-menu {
+  // Applying combined style: top border-top, bottom box-shadow
   border-top: 1px solid $top_light_color;
-  border-bottom: 1px solid $bottom_shadow_color;
+  border-left-width: 0px;
+  border-right-width: 0px;
+  border-bottom-width: 0px;
+  border-style: solid none none none; // Ensure only top border is from 'border' property
+  box-shadow: inset 0 -1px 0 $bottom_shadow_color;
   border-radius: $button_radius;
   min-width: 12em;
   max-width: 12em;
@@ -30,7 +69,48 @@ $button_radius: 20px;
 
 // standalone toggle button
 .quick-toggle {
-  &:checked { @extend %default_button;}
+  // Default state inherits from the .quick-toggle, .quick-toggle-has-menu rule
+
+  &:hover,
+  &:focus {
+    // Preserve existing background color changes, apply combined border/shadow
+    border-top: 1px solid $top_light_color !important;
+    border-left-width: 0px !important;
+    border-right-width: 0px !important;
+    border-bottom-width: 0px !important;
+    border-style: solid none none none !important;
+    box-shadow: inset 0 -1px 0 $bottom_shadow_color !important;
+    border-radius: $button_radius; // Removed !important
+  }
+
+  &:active {
+    // Preserve existing background color changes, apply combined border/shadow
+    border-top: 1px solid $top_light_color !important;
+    border-left-width: 0px !important;
+    border-right-width: 0px !important;
+    border-bottom-width: 0px !important;
+    border-style: solid none none none !important;
+    box-shadow: inset 0 -1px 0 $bottom_shadow_color !important;
+    border-radius: $button_radius; // Removed !important
+  }
+
+  &:checked {
+    @extend %default_button; // Keep for background, text color, etc.
+    // Override border/shadow from %default_button
+    border-top: 1px solid $top_light_color !important;
+    border-left-width: 0px !important;
+    border-right-width: 0px !important;
+    border-bottom-width: 0px !important;
+    border-style: solid none none none !important;
+    box-shadow: inset 0 -1px 0 $bottom_shadow_color !important;
+    border-radius: $button_radius; // Removed !important here
+
+    // Hover, focus, active states on a :checked toggle
+    // These will inherit the :hover, :focus, :active rules from above
+    // unless %default_button defines more specific :checked:hover states
+    // that would also need overriding for borders/shadows.
+    // For now, assuming the general :hover/:focus/:active are sufficient.
+  }
 
   & > StBoxLayout { spacing: $base_padding * 1.5; }
 
@@ -64,35 +144,69 @@ $button_radius: 20px;
   & .quick-toggle {
     min-width: auto;
     max-width: auto;
-    border-top: none; // Remove inherited/conflicting top border
-    border-bottom: none; // Remove inherited/conflicting bottom border
+    // Children get no border or shadow; parent container provides it.
+    border: none !important;
+    box-shadow: none !important;
     // border-left and border-right are implicitly none unless set by other rules
 
+    // Default state LTR/RTL rules
     &:ltr {
-      border-radius: $forced_circular_radius 0 0 $forced_circular_radius;
+      border-radius: $button_radius 0 0 $button_radius;
       > StBoxLayout { padding-right: $scaled_padding * 1.5; }
     }
-
     &:rtl {
-      border-radius: 0 $forced_circular_radius $forced_circular_radius 0;
+      border-radius: 0 $button_radius $button_radius 0;
       > StBoxLayout { padding-left: $scaled_padding * 1.5; }
     }
+    // Default state for :last-child (single button appearance)
+    &:ltr:last-child { border-radius: $button_radius; }
+    &:rtl:last-child { border-radius: $button_radius; }
 
-    &:ltr:last-child { border-radius: $forced_circular_radius; }
-    &:rtl:last-child { border-radius: $forced_circular_radius; }
+    // States: override general .quick-toggle:state !important rules for border-radius
+    &:hover, &:focus, &:active, &:checked {
+      // Ensure child parts have NO border/shadow from general state rules.
+      // Parent container provides the visual border/shadow for the unit.
+      border: none !important;
+      box-shadow: none !important;
+
+      // Only apply this special radius if it's part of a split button (i.e., not the only child).
+      // If it IS :last-child, it will correctly inherit border-radius: $button_radius !important;
+      // from the general .quick-toggle:state rules (e.g., .quick-toggle:hover).
+      &:not(:last-child) {
+        &:ltr {
+          border-radius: $button_radius 0 0 $button_radius !important;
+        }
+        &:rtl {
+          border-radius: 0 $button_radius $button_radius 0 !important;
+        }
+      }
+    }
   }
 
   & .quick-toggle-menu-button {
     padding: $scaled_padding $scaled_padding * 1.75;
-    border-top: none; // Remove conflicting top border
-    border-bottom: none; // Remove conflicting bottom border
+    // Children get no border or shadow; parent container provides it.
+    border: none !important;
+    box-shadow: none !important;
     // Specific border-radius for LTR/RTL is preserved below
 
     &:ltr {
-      border-radius: 0 $forced_circular_radius $forced_circular_radius 0;
+      border-radius: 0 $button_radius $button_radius 0; // Default LTR radius
+      // Ensure states also maintain this specific radius
+      &:hover, &:focus, &:active, &:checked {
+        border: none !important; // Add this
+        box-shadow: none !important; // Add this
+        border-radius: 0 $button_radius $button_radius 0 !important;
+      }
     }
     &:rtl {
-      border-radius: $forced_circular_radius 0 0 $forced_circular_radius;
+      border-radius: $button_radius 0 0 $button_radius; // Default RTL radius
+      // Ensure states also maintain this specific radius
+      &:hover, &:focus, &:active, &:checked {
+        border: none !important; // Add this
+        box-shadow: none !important; // Add this
+        border-radius: $button_radius 0 0 $button_radius !important;
+      }
     }
   }
 
@@ -112,8 +226,8 @@ $quick_toggle_menubutton_bg_color: if(
   if($variant == 'light', darken($bg_color, 5%), lighten($bg_color, 8%))
 );
 $quick_toggle_menubutton_checked_bg_color: if(
-  $contrast == 'high', st-mix(-st-accent-color, $fg_color, 75%),
-  if($variant == 'light', st-mix(-st-accent-color, $fg_color, 92%), st-mix(-st-accent-color, $fg_color, 85%))
+  $contrast == 'high', st-mix($theme_color, $fg_color, 75%),
+  if($variant == 'light', st-mix($theme_color, $fg_color, 92%), st-mix($theme_color, $fg_color, 85%))
 );
 
 // separator colors
@@ -124,7 +238,7 @@ $quick_toggle_separator_color: if(
 
 $quick_toggle_checked_separator_color: if(
   $contrast == 'high', transparent,
-  if($variant == 'light', st-mix(-st-accent-fg-color, -st-accent-color, 20%), st-mix(-st-accent-fg-color, -st-accent-color, 30%),)
+  if($variant == 'light', st-mix(-st-accent-fg-color, $theme_color, 20%), st-mix(-st-accent-fg-color, $theme_color, 30%),)
 );
 
 .quick-toggle-has-menu {
@@ -153,17 +267,79 @@ $quick_toggle_checked_separator_color: if(
   }
 }
 
+// Ensure the .quick-toggle-has-menu container itself maintains the combined style in all states.
+// (Default style is from the shared .quick-toggle, .quick-toggle-has-menu rule)
+.quick-toggle-has-menu {
+  &:hover,
+  &:focus {
+    // Preserve any background changes, ensure combined border/shadow
+    border-top: 1px solid $top_light_color !important;
+    border-left-width: 0px !important;
+    border-right-width: 0px !important;
+    border-bottom-width: 0px !important;
+    border-style: solid none none none !important;
+    box-shadow: inset 0 -1px 0 $bottom_shadow_color !important;
+    border-radius: $button_radius !important;
+  }
+
+  &:active {
+    // Preserve any background changes, ensure combined border/shadow
+    border-top: 1px solid $top_light_color !important;
+    border-left-width: 0px !important;
+    border-right-width: 0px !important;
+    border-bottom-width: 0px !important;
+    border-style: solid none none none !important;
+    box-shadow: inset 0 -1px 0 $bottom_shadow_color !important;
+    border-radius: $button_radius !important;
+  }
+
+  &:checked {
+    // Preserve any background changes (e.g. from its own :checked rule for separator color),
+    // ensure combined border/shadow for the container.
+    border-top: 1px solid $top_light_color !important;
+    border-left-width: 0px !important;
+    border-right-width: 0px !important;
+    border-bottom-width: 0px !important;
+    border-style: solid none none none !important;
+    box-shadow: inset 0 -1px 0 $bottom_shadow_color !important;
+    border-radius: $button_radius !important;
+  }
+}
+
 .quick-slider {
   & > StBoxLayout { spacing: $base_padding; }
 
-  .icon-button { padding: $base_padding; }
+  .icon-button {
+    padding: $base_padding; // Keep existing padding
+
+    // Remove borders and shadow, make default background transparent
+    border-width: 0px !important;
+    box-shadow: none !important;
+    background-color: transparent !important;
+
+    // Ensure border/shadow remain off in other states
+    // Background changes for these states will be inherited or can be set explicitly if needed
+    &:hover,
+    &:focus,
+    &:active,
+    &:checked { // Cover all common states
+      border-width: 0px !important;
+      box-shadow: none !important;
+      // If these states should also be transparent, add:
+      // background-color: transparent !important; // or a very subtle hover/active transparent background
+    }
+  }
 
   .slider-bin {
-    &:focus {@include button(focus);}
     padding: $base_padding;
-    border-top: 1px solid $top_light_color;
-    border-bottom: 1px solid $bottom_shadow_color;
-    border-radius: $button_radius;
+    border-width: 0px; // Remove borders from default state
+    border-radius: $button_radius; // Keep radius
+
+    &:focus {
+      @include button(focus); // Apply focus style from mixin (e.g., background change)
+      border-width: 0px !important; // Ensure no borders are (re)added by the focus mixin
+      box-shadow: none !important; // Also remove any box-shadow the focus mixin might add
+    }
   }
 }
 
@@ -196,7 +372,7 @@ $quick_toggle_checked_separator_color: if(
       background-color: transparentize($fg_color, 0.8);
 
       &.active {
-        background-color: -st-accent-color;
+        background-color: $theme_color;
         color: -st-accent-fg-color;
       }
 
@@ -256,16 +432,109 @@ $quick_toggle_checked_separator_color: if(
 .keyboard-brightness-level {
   spacing: $base_padding;
 
-  .button:checked { @extend %default_button; }
+  .button {
+    // Apply combined style to keyboard brightness buttons
+    // Using !important for default state here due to potential specificity conflicts
+    border-top: 1px solid $top_light_color !important;
+    border-left-width: 0px !important;
+    border-right-width: 0px !important;
+    border-bottom-width: 0px !important;
+    border-style: solid none none none !important;
+    box-shadow: inset 0 -1px 0 $bottom_shadow_color !important;
+    border-radius: $button_radius !important; // Assuming $button_radius is appropriate
+
+    &:hover,
+    &:focus {
+      // Combined style for hover/focus states
+      // Background changes should be handled by existing theme rules
+      border-top: 1px solid $top_light_color !important;
+      border-left-width: 0px !important;
+      border-right-width: 0px !important;
+      border-bottom-width: 0px !important;
+      border-style: solid none none none !important;
+      box-shadow: inset 0 -1px 0 $bottom_shadow_color !important;
+      border-radius: $button_radius !important;
+    }
+
+    &:active {
+      // Combined style for active state
+      border-top: 1px solid $top_light_color !important;
+      border-left-width: 0px !important;
+      border-right-width: 0px !important;
+      border-bottom-width: 0px !important;
+      border-style: solid none none none !important;
+      box-shadow: inset 0 -1px 0 $bottom_shadow_color !important;
+      border-radius: $button_radius !important;
+    }
+
+    &:checked {
+      @extend %default_button; // Keep for background, text color, etc.
+      // Override border/shadow from %default_button
+      border-top: 1px solid $top_light_color !important;
+      border-left-width: 0px !important;
+      border-right-width: 0px !important;
+      border-bottom-width: 0px !important;
+      border-style: solid none none none !important;
+      box-shadow: inset 0 -1px 0 $bottom_shadow_color !important;
+      border-radius: $button_radius !important;
+    }
+  }
 }
 
 // background apps
 
 .background-apps-quick-toggle {
   min-height: to_em(40px);
-  background-color: transparent;
+  background-color: transparent; // Keep this
 
-  & StIcon { icon-size: $scalable_icon_size !important; }
+  // Apply combined style, using !important for default state due to transparent background
+  // and to ensure consistency with other explicitly styled toggles.
+  border-top: 1px solid $top_light_color !important;
+  border-left-width: 0px !important;
+  border-right-width: 0px !important;
+  border-bottom-width: 0px !important;
+  border-style: solid none none none !important;
+  box-shadow: inset 0 -1px 0 $bottom_shadow_color !important;
+  border-radius: $button_radius !important;
+
+  & StIcon { icon-size: $scalable_icon_size !important; } // Keep this
+
+  &:hover,
+  &:focus {
+    // Background might change on hover based on general rules, or stay transparent.
+    // Combined style should persist.
+    border-top: 1px solid $top_light_color !important;
+    border-left-width: 0px !important;
+    border-right-width: 0px !important;
+    border-bottom-width: 0px !important;
+    border-style: solid none none none !important;
+    box-shadow: inset 0 -1px 0 $bottom_shadow_color !important;
+    border-radius: $button_radius !important;
+  }
+
+  &:active {
+    // Combined style for active state
+    border-top: 1px solid $top_light_color !important;
+    border-left-width: 0px !important;
+    border-right-width: 0px !important;
+    border-bottom-width: 0px !important;
+    border-style: solid none none none !important;
+    box-shadow: inset 0 -1px 0 $bottom_shadow_color !important;
+    border-radius: $button_radius !important;
+  }
+
+  &:checked {
+    // Background might change when checked (e.g., to an accent color if it were opaque)
+    // or it might remain transparent. The borders/shadow should appear.
+    // Using !important for consistency.
+    border-top: 1px solid $top_light_color !important;
+    border-left-width: 0px !important;
+    border-right-width: 0px !important;
+    border-bottom-width: 0px !important;
+    border-style: solid none none none !important;
+    box-shadow: inset 0 -1px 0 $bottom_shadow_color !important;
+    border-radius: $button_radius !important;
+  }
 }
 
 .background-app-item {
