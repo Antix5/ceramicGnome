@@ -1,7 +1,7 @@
 /* Dash */
 
 // uses system colors
-$dash_background_color: $system_overlay_bg_color;
+$dash_background_color: #3b3b3b;
 
 $dash_placeholder_size: 32px;
 $dash_padding: $base_padding * 2;
@@ -11,7 +11,7 @@ $dash_spacing: $base_margin * 0.5;
 
 // container for the dash
 #dash {
-  // a bit of spacing so that dash doesn't touch the screen edges
+  // a bit of spacing so that dash doesn't touch the screen edgess
   padding-left: $base_padding;
   padding-right: $base_padding;
 

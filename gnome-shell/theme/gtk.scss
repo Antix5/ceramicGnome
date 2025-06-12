@@ -1,0 +1,92 @@
+$variant: 'dark';
+$contrast: 'normal';
+@import "gnome-shell-sass/_colors";
+
+
+window {
+  border-top: 1px solid $top_light_color;
+  border-bottom: 2px solid $bottom_shadow_color;
+  background-color: $base_color;
+}
+
+headerbar {
+  background-color: $bg_color;
+  border: 0px;
+  box-shadow: none;
+
+}
+
+entry {
+  color: $fg_color;
+  background-color: $bg_color;
+  border: 1px solid $borders_color;
+  border-radius: 20px;
+  box-shadow: none;
+
+
+}
+
+
+
+menu{
+    background-color: $bg_color;
+
+}
+
+windowhandle box{
+  background-color: $bg_color;
+
+}
+
+stack{
+  background-color: $bg_color;
+}
+
+
+headerbar{
+  background-color: $bg_color;
+
+}
+
+textview {
+
+  background-color: $base_color;
+
+
+}
+
+button.suggested-action {
+
+  background-color: $bg_color;
+  border-top: 1px solid $top_light_color;
+  border-bottom: 1px solid $bottom_shadow_color;
+}
+
+.placessidebar{
+  background-color: $bg_color;
+}
+
+.navigation-sidebar {
+  background-color: $bg_color;
+}
+
+statuspage{
+  background-color: $bg_color;
+}
+
+gridview {
+  background-color: $base_color;
+
+}
+
+
+
+treeview {
+  background-color: $bg_color;
+
+}
+
+treeview *{
+  background-color: $bg_color;
+
+}

@@ -1,0 +1,54 @@
+window {
+  border-top: 1px solid #6b576a;
+  border-bottom: 2px solid #1b1938;
+  background-color: #0e0b1b; }
+
+headerbar {
+  background-color: #0c070f;
+  border: 0px;
+  box-shadow: none; }
+
+entry {
+  color: #ffffff;
+  background-color: #0c070f;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  box-shadow: none; }
+
+menu {
+  background-color: #0c070f; }
+
+windowhandle box {
+  background-color: #0c070f; }
+
+stack {
+  background-color: #0c070f; }
+
+headerbar {
+  background-color: #0c070f; }
+
+textview {
+  background-color: #0e0b1b; }
+
+button.suggested-action {
+  background-color: #0c070f;
+  border-top: 1px solid #6b576a;
+  border-bottom: 1px solid #1b1938; }
+
+.placessidebar {
+  background-color: #0c070f; }
+
+.navigation-sidebar {
+  background-color: #0c070f; }
+
+statuspage {
+  background-color: #0c070f; }
+
+gridview {
+  background-color: #0e0b1b; }
+
+treeview {
+  background-color: #0c070f; }
+
+treeview * {
+  background-color: #0c070f; }
